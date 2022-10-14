@@ -2,6 +2,7 @@ package com.matdzie.peopleimportapi.services;
 
 import com.matdzie.peopleimportapi.api.v1.mapper.PersonMapper;
 import com.matdzie.peopleimportapi.api.v1.model.PersonDto;
+import com.matdzie.peopleimportapi.exceptions.PersonNotFoundException;
 import com.matdzie.peopleimportapi.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,13 @@ public class PersonServiceImpl implements PersonService {
         this.restTemplate = restTemplate;
         this.personMapper = personMapper;
         this.personRepository = personRepository;
+    }
+
+    @Override
+    public PersonDto getById(Long id) {
+        return personRepository.findById(id)
+                .map(personMapper::personToPersonDto)
+                .orElseThrow(PersonNotFoundException::new);
     }
 
     @Override
