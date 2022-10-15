@@ -5,6 +5,8 @@ import com.matdzie.peopleimportapi.domain.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PersonMapperTest {
@@ -30,7 +32,7 @@ class PersonMapperTest {
 
     @Test
     void personDtoToPerson() {
-        var personDto = new PersonDto(2L, "", 0, 0);
+        var personDto = new PersonDto(1L, "", 2, 3);
 
         var person = sut.personDtoToPerson(personDto);
 
@@ -38,5 +40,22 @@ class PersonMapperTest {
         assertEquals(personDto.getName(), person.getName());
         assertEquals(personDto.getHeight(), person.getHeight());
         assertEquals(personDto.getMass(), person.getMass());
+    }
+
+    @Test
+    void personsToPersonDtos() {
+        var persons = Arrays.asList(
+                new Person(13L, "Foo", 35, 140),
+                new Person(1313L, "Bar", 35324545, 1),
+                new Person(2L, "Baz", 425, 4223232));
+
+        var personDtos = sut.personsToPersonDtos(persons);
+
+        for (int i = 0; i < persons.size(); ++i) {
+            assertEquals(persons.get(i).getId(), personDtos.get(i).getId());
+            assertEquals(persons.get(i).getName(), personDtos.get(i).getName());
+            assertEquals(persons.get(i).getHeight(), personDtos.get(i).getHeight());
+            assertEquals(persons.get(i).getMass(), personDtos.get(i).getMass());
+        }
     }
 }

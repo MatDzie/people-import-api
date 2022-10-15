@@ -1,10 +1,18 @@
 package com.matdzie.peopleimportapi.api.v1.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
+
 public class PersonDto {
 
     private Long id;
+
+    @NotNull
     private String name;
+    @Min(1)
     private Integer height;
+    @Min(1)
     private Integer mass;
 
     public PersonDto(Long id, String name, Integer height, Integer mass) {
@@ -44,5 +52,18 @@ public class PersonDto {
 
     public void setMass(Integer mass) {
         this.mass = mass;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, height, mass);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDto personDto = (PersonDto) o;
+        return Objects.equals(id, personDto.id) && name.equals(personDto.name) && height.equals(personDto.height) && mass.equals(personDto.mass);
     }
 }

@@ -1,15 +1,16 @@
 package com.matdzie.peopleimportapi.controllers.v1;
 
 import com.matdzie.peopleimportapi.api.v1.model.PersonDto;
+import com.matdzie.peopleimportapi.api.v1.model.PersonListDto;
 import com.matdzie.peopleimportapi.services.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(PersonController.BASE_URL)
+@RequestMapping(PersonController.BASE_URI)
 public class PersonController {
 
-    public static final String BASE_URL = "/api/v1/persons";
+    public static final String BASE_URI = "/api/v1/persons";
 
     private final PersonService personService;
 
@@ -17,10 +18,16 @@ public class PersonController {
         this.personService = personService;
     }
 
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public PersonListDto findByName(@RequestParam String name) {
+        return personService.findByName(name);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto getById(@PathVariable Long id) {
-        return personService.getById(id);
+    public PersonDto findById(@PathVariable Long id) {
+        return personService.findById(id);
     }
 
     @GetMapping("/import/{id}")

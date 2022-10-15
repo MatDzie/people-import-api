@@ -17,10 +17,10 @@ public class Person {
     @NotNull
     private String name;
 
-    @Min(0)
+    @Min(1)
     private Integer height;
 
-    @Min(0)
+    @Min(1)
     private Integer mass;
 
     public Person() {

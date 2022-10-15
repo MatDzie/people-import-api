@@ -2,6 +2,7 @@ package com.matdzie.peopleimportapi.services;
 
 import com.matdzie.peopleimportapi.api.v1.mapper.PersonMapper;
 import com.matdzie.peopleimportapi.api.v1.model.PersonDto;
+import com.matdzie.peopleimportapi.api.v1.model.PersonListDto;
 import com.matdzie.peopleimportapi.exceptions.PersonNotFoundException;
 import com.matdzie.peopleimportapi.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,10 +26,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonDto getById(Long id) {
+    public PersonDto findById(Long id) {
         return personRepository.findById(id)
                 .map(personMapper::personToPersonDto)
                 .orElseThrow(PersonNotFoundException::new);
+    }
+
+    @Override
+    public PersonListDto findByName(String name) {
+        var persons = personRepository.findByNameContainsIgnoreCase(name);
+        if (persons.isEmpty()) throw new PersonNotFoundException();
+        return new PersonListDto(personMapper.personsToPersonDtos(persons));
     }
 
     @Override
