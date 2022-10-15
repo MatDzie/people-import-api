@@ -1,5 +1,7 @@
 package com.matdzie.peopleimportapi.api.v1.model;
 
+import com.matdzie.peopleimportapi.validation.PersonHeightConstrain;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
@@ -10,9 +12,12 @@ public class PersonDto {
 
     @NotNull
     private String name;
-    @Min(1)
+
+    @PersonHeightConstrain
     private Integer height;
+
     @Min(1)
+    @NotNull
     private Integer mass;
 
     public PersonDto(Long id, String name, Integer height, Integer mass) {

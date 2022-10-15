@@ -18,9 +18,11 @@ public class Person {
     private String name;
 
     @Min(1)
+    @NotNull
     private Integer height;
 
     @Min(1)
+    @NotNull
     private Integer mass;
 
     public Person() {
