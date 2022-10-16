@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matdzie.peopleimportapi.api.v1.model.PersonDto;
 import com.matdzie.peopleimportapi.api.v1.model.PersonListDto;
 import com.matdzie.peopleimportapi.controllers.ControllerAdviceExceptionHandler;
-import com.matdzie.peopleimportapi.exceptions.PersonNotFoundException;
 import com.matdzie.peopleimportapi.services.PersonService;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
@@ -65,8 +66,7 @@ class PersonControllerTest {
     @Test
     void findByIdPersonNotFound() throws Exception {
         Long id = 3L;
-
-        when(personService.findById(id)).thenThrow(PersonNotFoundException.class);
+        when(personService.findById(id)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         mockMvc.perform(get(PersonController.BASE_URI + "/" + id))
                 .andExpect(status().isNotFound());
@@ -96,7 +96,7 @@ class PersonControllerTest {
     void findByNamePersonNotFound() throws Exception {
         String name = "Not existing name";
 
-        when(personService.findByName(name)).thenThrow(PersonNotFoundException.class);
+        when(personService.findByName(name)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var uri = UriComponentsBuilder.fromUriString(PersonController.BASE_URI).queryParam("name", name).build();
         mockMvc.perform(get(uri.toString()))
@@ -108,9 +108,15 @@ class PersonControllerTest {
     @Test
     void importByIdOk() throws Exception {
         Long id = 23L;
+        var personDto = new PersonDto("X", 1, 999999);
+        var personDtoJson = objectMapper.writeValueAsString(personDto);
 
-        mockMvc.perform(get(PersonController.BASE_URI + "/import/" + id))
-                .andExpect(status().isOk());
+        when(personService.importById(id)).thenReturn(personDto);
+
+        mockMvc.perform(get(PersonController.BASE_URI + "/import/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(personDtoJson));
 
         verify(personService, times(1)).importById(id);
     }

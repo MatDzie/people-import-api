@@ -11,5 +11,5 @@ public interface PersonService {
 
     PersonListDto findByName(String name);
 
-    void importById(Long id);
+    PersonDto importById(Long id);
 }

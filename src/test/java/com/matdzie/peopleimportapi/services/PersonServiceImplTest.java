@@ -3,13 +3,14 @@ package com.matdzie.peopleimportapi.services;
 import com.matdzie.peopleimportapi.api.v1.mapper.PersonMapper;
 import com.matdzie.peopleimportapi.api.v1.model.PersonDto;
 import com.matdzie.peopleimportapi.domain.Person;
-import com.matdzie.peopleimportapi.exceptions.PersonNotFoundException;
 import com.matdzie.peopleimportapi.repositories.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,8 +84,9 @@ class PersonServiceImplTest {
 
         when(personRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(PersonNotFoundException.class, () -> sut.findById(id));
+        var thrown = assertThrows(ResponseStatusException.class, () -> sut.findById(id));
 
+        assertEquals(HttpStatus.NOT_FOUND, thrown.getStatus());
         verify(personRepository, times(1)).findById(id);
     }
 
@@ -114,8 +116,9 @@ class PersonServiceImplTest {
 
         when(personRepository.findByNameContainsIgnoreCase(name)).thenReturn(emptyPersonsList);
 
-        assertThrows(PersonNotFoundException.class, () -> sut.findByName(name));
+        var thrown = assertThrows(ResponseStatusException.class, () -> sut.findByName(name));
 
+        assertEquals(HttpStatus.NOT_FOUND, thrown.getStatus());
         verify(personRepository, times(1)).findByNameContainsIgnoreCase(name);
     }
 
@@ -130,11 +133,15 @@ class PersonServiceImplTest {
 
         when(restTemplate.getForObject(anyString(), eq(PersonDto.class))).thenReturn(personDto);
         when(personMapper.personDtoToPerson(personDto)).thenReturn(person);
+        when(personRepository.save(person)).thenReturn(person);
+        when(personMapper.personToPersonDto(person)).thenReturn(personDto);
 
-        sut.importById(id);
+        var savedPersonDto = sut.importById(id);
 
+        assertEquals(personDto, savedPersonDto);
         verify(restTemplate, times(1)).getForObject(importApiUrl + id, PersonDto.class);
         verify(personMapper, times(1)).personDtoToPerson(personDto);
         verify(personRepository, times(1)).save(person);
+        verify(personMapper, times(1)).personToPersonDto(person);
     }
 }
