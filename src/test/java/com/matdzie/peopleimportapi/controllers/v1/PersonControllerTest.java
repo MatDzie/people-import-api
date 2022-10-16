@@ -49,7 +49,7 @@ class PersonControllerTest {
     @Test
     void findByIdOk() throws Exception {
         Long id = 523L;
-        var personDto = new PersonDto(id, "X", 1, 999999);
+        var personDto = new PersonDto("X", 1, 999999);
         var personDtoJson = objectMapper.writeValueAsString(personDto);
 
         when(personService.findById(id)).thenReturn(personDto);
@@ -78,8 +78,8 @@ class PersonControllerTest {
     void findByNameOk() throws Exception {
         String name = "o";
         var personListDto = new PersonListDto(Arrays.asList(
-                new PersonDto(3L, "Ro3", 10, 10),
-                new PersonDto(4L, "nOn", 211, 120)));
+                new PersonDto("Ro3", 10, 10),
+                new PersonDto("nOn", 211, 120)));
         var personListDtoJson = objectMapper.writeValueAsString(personListDto);
 
         when(personService.findByName(name)).thenReturn(personListDto);

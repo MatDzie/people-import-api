@@ -24,7 +24,6 @@ class PersonMapperTest {
 
         var personDto = sut.personToPersonDto(person);
 
-        assertEquals(person.getId(), personDto.getId());
         assertEquals(person.getName(), personDto.getName());
         assertEquals(person.getHeight(), personDto.getHeight());
         assertEquals(person.getMass(), personDto.getMass());
@@ -32,11 +31,10 @@ class PersonMapperTest {
 
     @Test
     void personDtoToPerson() {
-        var personDto = new PersonDto(1L, "", 2, 3);
+        var personDto = new PersonDto("", 2, 3);
 
         var person = sut.personDtoToPerson(personDto);
 
-        assertEquals(personDto.getId(), person.getId());
         assertEquals(personDto.getName(), person.getName());
         assertEquals(personDto.getHeight(), person.getHeight());
         assertEquals(personDto.getMass(), person.getMass());
@@ -52,7 +50,6 @@ class PersonMapperTest {
         var personDtos = sut.personsToPersonDtos(persons);
 
         for (int i = 0; i < persons.size(); ++i) {
-            assertEquals(persons.get(i).getId(), personDtos.get(i).getId());
             assertEquals(persons.get(i).getName(), personDtos.get(i).getName());
             assertEquals(persons.get(i).getHeight(), personDtos.get(i).getHeight());
             assertEquals(persons.get(i).getMass(), personDtos.get(i).getMass());

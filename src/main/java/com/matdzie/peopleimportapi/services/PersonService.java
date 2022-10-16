@@ -5,6 +5,8 @@ import com.matdzie.peopleimportapi.api.v1.model.PersonListDto;
 
 public interface PersonService {
 
+    PersonDto save(PersonDto personDto);
+
     PersonDto findById(Long id);
 
     PersonListDto findByName(String name);

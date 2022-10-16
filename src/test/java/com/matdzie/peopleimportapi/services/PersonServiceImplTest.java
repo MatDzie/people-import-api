@@ -38,13 +38,34 @@ class PersonServiceImplTest {
     }
 
     @Test
+    void saveOk() {
+        Long id = 3123L;
+        String name = "X";
+        Integer height = 1;
+        Integer mass = 20;
+        var person = new Person(id, name, height, mass);
+        var personDto = new PersonDto(name, height, mass);
+
+        when(personRepository.save(person)).thenReturn(person);
+        when(personMapper.personToPersonDto(person)).thenReturn(personDto);
+        when(personMapper.personDtoToPerson(personDto)).thenReturn(person);
+
+        var result = sut.save(personDto);
+
+        assertEquals(personDto, result);
+        verify(personRepository, times(1)).save(person);
+        verify(personMapper, times(1)).personToPersonDto(person);
+        verify(personMapper, times(1)).personDtoToPerson(personDto);
+    }
+
+    @Test
     void findByIdOk() {
         Long id = 9999L;
         String name = "Vader";
         Integer height = 300;
         Integer mass = 200;
         var person = new Person(id, name, height, mass);
-        var personDto = new PersonDto(id, name, height, mass);
+        var personDto = new PersonDto(name, height, mass);
 
         when(personRepository.findById(id)).thenReturn(Optional.of(person));
         when(personMapper.personToPersonDto(person)).thenReturn(personDto);
@@ -75,8 +96,8 @@ class PersonServiceImplTest {
                 new Person(4L, "Franek Kimono", 2, 4343));
 
         var personDtos = Arrays.asList(
-                new PersonDto(3L, "Anna", 23, 32),
-                new PersonDto(4L, "Franek Kimono", 2, 4343));
+                new PersonDto("Anna", 23, 32),
+                new PersonDto("Franek Kimono", 2, 4343));
 
         when(personRepository.findByNameContainsIgnoreCase(name)).thenReturn(persons);
         when(personMapper.personsToPersonDtos(persons)).thenReturn(personDtos);
@@ -104,7 +125,7 @@ class PersonServiceImplTest {
         String name = "Luke";
         Integer height = 120;
         Integer mass = 50;
-        var personDto = new PersonDto(id, name, height, mass);
+        var personDto = new PersonDto(name, height, mass);
         var person = new Person(id, name, height, mass);
 
         when(restTemplate.getForObject(anyString(), eq(PersonDto.class))).thenReturn(personDto);

@@ -2,6 +2,8 @@ package com.matdzie.peopleimportapi.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -14,7 +16,8 @@ public class Person {
     @Column(updatable = false, nullable = false, unique = true)
     private Long id;
 
-    @NotNull
+    @NotEmpty
+    @NotBlank
     private String name;
 
     @Min(1)

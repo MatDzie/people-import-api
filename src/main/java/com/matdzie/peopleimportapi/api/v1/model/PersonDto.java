@@ -3,14 +3,15 @@ package com.matdzie.peopleimportapi.api.v1.model;
 import com.matdzie.peopleimportapi.validation.PersonHeightConstrain;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 public class PersonDto {
 
-    private Long id;
-
-    @NotNull
+    @NotEmpty
+    @NotBlank
     private String name;
 
     @PersonHeightConstrain
@@ -20,19 +21,13 @@ public class PersonDto {
     @NotNull
     private Integer mass;
 
-    public PersonDto(Long id, String name, Integer height, Integer mass) {
-        this.id = id;
+    public PersonDto() {
+    }
+
+    public PersonDto(String name, Integer height, Integer mass) {
         this.name = name;
         this.height = height;
         this.mass = mass;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -61,7 +56,7 @@ public class PersonDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, height, mass);
+        return Objects.hash(name, height, mass);
     }
 
     @Override
@@ -69,6 +64,6 @@ public class PersonDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PersonDto personDto = (PersonDto) o;
-        return Objects.equals(id, personDto.id) && name.equals(personDto.name) && height.equals(personDto.height) && mass.equals(personDto.mass);
+        return name.equals(personDto.name) && height.equals(personDto.height) && mass.equals(personDto.mass);
     }
 }

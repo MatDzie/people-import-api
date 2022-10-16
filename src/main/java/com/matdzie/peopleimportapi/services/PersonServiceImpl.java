@@ -17,12 +17,17 @@ public class PersonServiceImpl implements PersonService {
     private final PersonMapper personMapper;
     private final PersonRepository personRepository;
 
-
     public PersonServiceImpl(@Value("${person.import.api.url}") String importApiUrl, RestTemplate restTemplate, PersonMapper personMapper, PersonRepository personRepository) {
         this.importApiUrl = importApiUrl;
         this.restTemplate = restTemplate;
         this.personMapper = personMapper;
         this.personRepository = personRepository;
+    }
+
+    @Override
+    public PersonDto save(PersonDto personDto) {
+        var person = personMapper.personDtoToPerson(personDto);
+        return personMapper.personToPersonDto(personRepository.save(person));
     }
 
     @Override
