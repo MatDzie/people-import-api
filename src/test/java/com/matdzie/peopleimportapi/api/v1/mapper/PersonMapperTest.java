@@ -20,7 +20,7 @@ class PersonMapperTest {
 
     @Test
     void personToPersonDto() {
-        var person = new Person(5L, "Joe", 200, 100);
+        var person = new Person(5L, "Joe", "200", "100");
 
         var personDto = sut.personToPersonDto(person);
 
@@ -31,7 +31,7 @@ class PersonMapperTest {
 
     @Test
     void personDtoToPerson() {
-        var personDto = new PersonDto("", 2, 3);
+        var personDto = new PersonDto("z", "2", "3");
 
         var person = sut.personDtoToPerson(personDto);
 
@@ -43,9 +43,9 @@ class PersonMapperTest {
     @Test
     void personsToPersonDtos() {
         var persons = Arrays.asList(
-                new Person(13L, "Foo", 35, 140),
-                new Person(1313L, "Bar", 35324545, 1),
-                new Person(2L, "Baz", 425, 4223232));
+                new Person(13L, "Foo", "35", "140"),
+                new Person(1313L, "Bar", "35324545", "1"),
+                new Person(2L, "Baz", "425", "4223232"));
 
         var personDtos = sut.personsToPersonDtos(persons);
 

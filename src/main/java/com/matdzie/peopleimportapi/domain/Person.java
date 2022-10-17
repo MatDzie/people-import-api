@@ -1,10 +1,8 @@
 package com.matdzie.peopleimportapi.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -20,18 +18,18 @@ public class Person {
     @NotBlank
     private String name;
 
-    @Min(1)
-    @NotNull
-    private Integer height;
+    @NotEmpty
+    @NotBlank
+    private String height;
 
-    @Min(1)
-    @NotNull
-    private Integer mass;
+    @NotEmpty
+    @NotBlank
+    private String mass;
 
     public Person() {
     }
 
-    public Person(Long id, String name, Integer height, Integer mass) {
+    public Person(Long id, String name, String height, String mass) {
         this.id = id;
         this.name = name;
         this.height = height;
@@ -54,19 +52,19 @@ public class Person {
         this.name = name;
     }
 
-    public Integer getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public Integer getMass() {
+    public String getMass() {
         return mass;
     }
 
-    public void setMass(Integer mass) {
+    public void setMass(String mass) {
         this.mass = mass;
     }
 }

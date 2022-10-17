@@ -4,23 +4,32 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
-public class PersonHeightValidator implements ConstraintValidator<PersonHeightConstrain, Integer> {
+public class PersonHeightValidator implements ConstraintValidator<PersonHeightConstrain, String> {
 
     @Value("${person.constrain.height.min}")
-    protected Integer personMinHeight;
+    protected String personMinHeight;
 
     @Override
-    public boolean isValid(Integer height, ConstraintValidatorContext context) {
-        var isValid = height != null && height >= personMinHeight;
-        if (!isValid) {
-            formatMessage(context);
+    public boolean isValid(String height, ConstraintValidatorContext context) {
+        boolean isValid = false;
+        formatMessage(context);
+
+        try {
+            NumberFormat format = NumberFormat.getInstance(Locale.US);
+            isValid = height != null && (height.equals("unknown") || (format.parse(height).intValue() >= Integer.parseInt(personMinHeight)));
+        } catch (ParseException ignored) {
+            isValid = false;
         }
+
         return isValid;
     }
 
     private void formatMessage(ConstraintValidatorContext context) {
-        String formattedMsg = String.format("Person height must be equal or greater than %d", this.personMinHeight);
+        String formattedMsg = String.format("Person height must be equal or greater than %s", this.personMinHeight);
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate(formattedMsg).addConstraintViolation();
     }

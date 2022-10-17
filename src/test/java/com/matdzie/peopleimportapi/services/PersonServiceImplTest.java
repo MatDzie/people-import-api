@@ -42,8 +42,8 @@ class PersonServiceImplTest {
     void saveOk() {
         Long id = 3123L;
         String name = "X";
-        Integer height = 1;
-        Integer mass = 20;
+        String height = "1";
+        String mass = "20";
         var person = new Person(id, name, height, mass);
         var personDto = new PersonDto(name, height, mass);
 
@@ -63,8 +63,8 @@ class PersonServiceImplTest {
     void findByIdOk() {
         Long id = 9999L;
         String name = "Vader";
-        Integer height = 300;
-        Integer mass = 200;
+        String height = "300";
+        String mass = "200";
         var person = new Person(id, name, height, mass);
         var personDto = new PersonDto(name, height, mass);
 
@@ -94,12 +94,12 @@ class PersonServiceImplTest {
     void findByNameOk() {
         String name = "a";
         var persons = Arrays.asList(
-                new Person(3L, "Anna", 23, 32),
-                new Person(4L, "Franek Kimono", 2, 4343));
+                new Person(3L, "Anna", "23", "32"),
+                new Person(4L, "Franek Kimono", "2", "4343"));
 
         var personDtos = Arrays.asList(
-                new PersonDto("Anna", 23, 32),
-                new PersonDto("Franek Kimono", 2, 4343));
+                new PersonDto("Anna", "23", "32"),
+                new PersonDto("Franek Kimono", "2", "4343"));
 
         when(personRepository.findByNameContainsIgnoreCase(name)).thenReturn(persons);
         when(personMapper.personsToPersonDtos(persons)).thenReturn(personDtos);
@@ -126,8 +126,8 @@ class PersonServiceImplTest {
     void importById() {
         Long id = 2L;
         String name = "Luke";
-        Integer height = 120;
-        Integer mass = 50;
+        String height = "120";
+        String mass = "50";
         var personDto = new PersonDto(name, height, mass);
         var person = new Person(id, name, height, mass);
 
