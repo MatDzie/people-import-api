@@ -7,6 +7,8 @@ public interface PersonService {
 
     PersonDto save(PersonDto personDto);
 
+    PersonDto update(Long id, PersonDto personDto);
+
     PersonDto findById(Long id);
 
     PersonListDto findByName(String name);

@@ -60,6 +60,25 @@ class PersonServiceImplTest {
     }
 
     @Test
+    void updateOk() {
+        Long id = 35L;
+        var person = new Person();
+        var personDto = new PersonDto("Name", "1", "2");
+
+        when(personRepository.save(person)).thenReturn(person);
+        when(personMapper.personToPersonDto(person)).thenReturn(personDto);
+        when(personMapper.personDtoToPerson(personDto)).thenReturn(person);
+
+        var result = sut.update(id, personDto);
+
+        assertEquals(personDto, result);
+        assertEquals(id, person.getId());
+        verify(personRepository, times(1)).save(person);
+        verify(personMapper, times(1)).personToPersonDto(person);
+        verify(personMapper, times(1)).personDtoToPerson(personDto);
+    }
+
+    @Test
     void findByIdOk() {
         Long id = 9999L;
         String name = "Vader";

@@ -33,6 +33,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public PersonDto update(Long id, PersonDto personDto) {
+        var person = personMapper.personDtoToPerson(personDto);
+        person.setId(id);
+        return personMapper.personToPersonDto(personRepository.save(person));
+    }
+
+    @Override
     public PersonDto findById(Long id) {
         return personRepository.findById(id)
                 .map(personMapper::personToPersonDto)

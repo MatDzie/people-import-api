@@ -29,6 +29,14 @@ public class PersonController {
         return personService.save(personDto);
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Updates person with given id",
+            notes = "Duplicates are not allowed")
+    public PersonDto update(@PathVariable Long id, @RequestBody PersonDto personDto) {
+        return personService.update(id, personDto);
+    }
+
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Find persons by name",
