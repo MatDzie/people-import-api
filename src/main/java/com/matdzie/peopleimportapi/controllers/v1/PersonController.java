@@ -6,10 +6,10 @@ import com.matdzie.peopleimportapi.services.PersonService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
+@Validated
 @RestController
 @RequestMapping(PersonController.BASE_URI)
 public class PersonController {
@@ -25,7 +25,7 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Adds new person",
             notes = "Duplicates are not allowed")
-    public PersonDto save(@RequestBody @Valid PersonDto personDto) {
+    public PersonDto save(@RequestBody PersonDto personDto) {
         return personService.save(personDto);
     }
 
