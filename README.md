@@ -1,5 +1,5 @@
 # people-import-api
-REST API that allows import people from swapi.dev what was a part of task for technical recruitment process.
+Task performed as part of technical recruitment: REST API that allows import people from swapi.dev
 
 Requirements:
 
